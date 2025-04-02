@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  id       String  @id @db.VarChar(255)
+  username String? @db.VarChar(255)
+  password String? @db.VarChar(255)
+  token    String? @db.VarChar(255)
+}
+
+model album {
+  id           String   @id @db.VarChar(255)
+  name         String?  @db.VarChar(255)
+  desc         String?  @db.Text
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+  photos_count Int?
+  videos_count Int?
+  publisher_id String?  @db.VarChar(255)
+
+  @@index([publisher_id], map: "publisher_id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model album_images {
+  album_id  String? @db.VarChar(255)
+  images_id String? @db.VarChar(255)
+
+  @@index([album_id], map: "album_id")
+  @@index([images_id], map: "images_id")
+  @@ignore
+}
+
+model artikel {
+  id           String   @id @db.VarChar(255)
+  title        String?  @db.VarChar(255)
+  content      String?  @db.Text
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+  edited_at    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  publisher_id String?  @db.VarChar(255)
+  editor_id    String?  @db.VarChar(255)
+
+  @@index([editor_id], map: "editor_id")
+  @@index([publisher_id], map: "publisher_id")
+}
+
+model aspiration_box_response {
+  email      String   @id @db.VarChar(255)
+  firstname  String?  @db.VarChar(255)
+  lastname   String?  @db.VarChar(255)
+  subject    String?  @db.VarChar(255)
+  content    String?  @db.Text
+  created_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model division {
+  id          String         @id @db.VarChar(255)
+  type        division_type?
+  name_short  String?        @db.VarChar(255)
+  fullname    String?        @db.VarChar(255)
+  description String?        @db.VarChar(255)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model division_pengurus {
+  division_id String? @db.VarChar(255)
+  pengurus_id String? @db.VarChar(255)
+  departemen  String? @db.VarChar(255)
+  bidang      String? @db.VarChar(255)
+
+  @@index([division_id], map: "division_id")
+  @@index([pengurus_id], map: "pengurus_id")
+  @@ignore
+}
+
+model images {
+  id   String       @id @db.VarChar(255)
+  name String?      @db.VarChar(255)
+  desc String?      @db.Text
+  type images_type?
+}
+
+model kabinet {
+  id              String  @id @db.VarChar(255)
+  name            String? @db.VarChar(255)
+  logo_url        String? @db.VarChar(255)
+  kabinet_img_url String? @db.VarChar(255)
+  visi            String? @db.Text
+  misi            String? @db.Text
+  gubernur_id     String? @db.VarChar(255)
+  wakil_id        String? @db.VarChar(255)
+
+  @@index([gubernur_id], map: "gubernur_id")
+  @@index([wakil_id], map: "wakil_id")
+}
+
+model pengurus {
+  id       String  @id @db.VarChar(255)
+  nim      String? @db.VarChar(255)
+  fullname String? @db.VarChar(255)
+  jurusan  String? @db.VarChar(255)
+  img_id   String? @db.VarChar(255)
+
+  @@index([img_id], map: "img_id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model pengurus_contact {
+  id           String                         @id @db.VarChar(255)
+  pengurus_id  String?                        @db.VarChar(255)
+  link         String?                        @db.VarChar(255)
+  contact_type pengurus_contact_contact_type?
+
+  @@index([pengurus_id], map: "pengurus_id")
+  @@ignore
+}
+
+model pengurus_img {
+  id      String  @id @db.VarChar(255)
+  img_url String? @db.VarChar(255)
+}
+
+model profile_data {
+  id               String  @id @db.VarChar(255)
+  total_mahasiswa  Int?
+  total_pengurus   Int?
+  jumlah_proker    Int?
+  hero_img_url     String? @db.VarChar(255)
+  gub_img_url      String? @db.VarChar(255)
+  wagub_img_url    String? @db.VarChar(255)
+  sambutan_gub     String? @db.Text
+  sambutan_wagub   String? @db.Text
+  kabinet_aktif_id String? @db.VarChar(255)
+
+  @@index([kabinet_aktif_id], map: "kabinet_aktif_id")
+}
+
+model survey_response {
+  email      String   @id @db.VarChar(255)
+  nama       String?  @db.VarChar(255)
+  jurusan    String?  @db.VarChar(255)
+  q1         String?  @db.VarChar(255)
+  q2         String?  @db.VarChar(255)
+  q3         String?  @db.VarChar(255)
+  q4         String?  @db.VarChar(255)
+  q5         String?  @db.Text
+  q7         String?  @db.VarChar(255)
+  q8         String?  @db.VarChar(255)
+  q9         String?  @db.Text
+  q10        String?  @db.Text
+  q11_url    String?  @db.VarChar(255)
+  q12        String?  @db.VarChar(255)
+  q13        String?  @db.VarChar(255)
+  q14        String?  @db.Text
+  q15        String?  @db.Text
+  q16_url    String?  @db.VarChar(255)
+  q17_mul    String?  @db.VarChar(255)
+  q18_mul    String?  @db.VarChar(255)
+  q19_mul    String?  @db.VarChar(255)
+  q20        String?  @db.VarChar(255)
+  q21        String?  @db.VarChar(255)
+  q22        String?  @db.VarChar(255)
+  q23        String?  @db.VarChar(255)
+  q24        String?  @db.Text
+  q25        String?  @db.Text
+  q26_url    String?  @db.VarChar(255)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model ukm {
+  id          String  @id @db.VarChar(255)
+  name        String? @db.VarChar(255)
+  description String? @db.VarChar(255)
+  url_link    String? @db.VarChar(255)
+}
+
+enum division_type {
+  Biro
+  Dinas
+}
+
+enum pengurus_contact_contact_type {
+  Instagram
+  LinkedIn
+  Twitter
+  Meta
+}
+
+enum images_type {
+  Photo
+  Video
+}
