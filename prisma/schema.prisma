@@ -37,13 +37,14 @@ model album_images {
 }
 
 model artikel {
-  id           String   @id @db.VarChar(255)
-  title        String?  @db.VarChar(255)
-  content      String?  @db.Text
-  created_at   DateTime @default(now()) @db.Timestamp(0)
-  edited_at    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
-  publisher_id String?  @db.VarChar(255)
-  editor_id    String?  @db.VarChar(255)
+  id            String    @id @db.VarChar(255)
+  title         String?   @db.VarChar(255)
+  thumbnail_url String    @db.VarChar(255)
+  content       String?   @db.Text
+  created_at    DateTime? @db.Timestamp(0)
+  edited_at     DateTime? @db.Timestamp(0)
+  publisher_id  String?   @db.VarChar(255)
+  editor_id     String?   @db.VarChar(255)
 
   @@index([editor_id], map: "editor_id")
   @@index([publisher_id], map: "publisher_id")

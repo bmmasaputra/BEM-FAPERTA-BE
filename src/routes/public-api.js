@@ -1,5 +1,6 @@
 import express from "express";
 import adminController from "../controller/adminController.js";
+import articleController from "../controller/articleController.js";
 
 const publicRouter = express.Router();
 
@@ -7,4 +8,4 @@ const publicRouter = express.Router();
 publicRouter.post("/api/v1/admin/init", adminController.initiate);
 publicRouter.post("/api/v1/admin/login", adminController.login);
 
-export default publicRouter
+export default publicRouter;
