@@ -8,50 +8,58 @@ datasource db {
 }
 
 model admin {
-  id       String  @id @db.VarChar(255)
-  username String? @db.VarChar(255)
-  password String? @db.VarChar(255)
-  token    String? @db.VarChar(255)
+  id                                  String    @id @db.VarChar(255)
+  username                            String?   @db.VarChar(255)
+  password                            String?   @db.VarChar(255)
+  album                               album[]
+  artikel_artikel_publisher_idToadmin artikel[] @relation("artikel_publisher_idToadmin")
+  artikel_artikel_editor_idToadmin    artikel[] @relation("artikel_editor_idToadmin")
 }
 
 model album {
-  id           String   @id @db.VarChar(255)
-  name         String?  @db.VarChar(255)
-  desc         String?  @db.Text
-  created_at   DateTime @default(now()) @db.Timestamp(0)
+  id           String         @id @db.VarChar(255)
+  name         String?        @db.VarChar(255)
+  desc         String?        @db.Text
+  created_at   DateTime       @default(now()) @db.Timestamp(0)
   photos_count Int?
   videos_count Int?
-  publisher_id String?  @db.VarChar(255)
+  publisher_id String?        @db.VarChar(255)
+  admin        admin?         @relation(fields: [publisher_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "album_ibfk_1")
+  album_images album_images[]
 
   @@index([publisher_id], map: "publisher_id")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model album_images {
+  id        String  @id @db.VarChar(255)
   album_id  String? @db.VarChar(255)
   images_id String? @db.VarChar(255)
+  album     album?  @relation(fields: [album_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "album_images_ibfk_1")
+  images    images? @relation(fields: [images_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "album_images_ibfk_2")
 
   @@index([album_id], map: "album_id")
   @@index([images_id], map: "images_id")
-  @@ignore
 }
 
 model artikel {
-  id            String    @id @db.VarChar(255)
-  title         String?   @db.VarChar(255)
-  thumbnail_url String    @db.VarChar(255)
-  content       String?   @db.Text
-  created_at    DateTime? @db.Timestamp(0)
-  edited_at     DateTime? @db.Timestamp(0)
-  publisher_id  String?   @db.VarChar(255)
-  editor_id     String?   @db.VarChar(255)
+  id                                String    @id @db.VarChar(255)
+  title                             String?   @db.VarChar(255)
+  thumbnail_url                     String?   @db.VarChar(255)
+  content                           String?   @db.Text
+  created_at                        DateTime  @default(now()) @db.Timestamp(0)
+  edited_at                         DateTime? @default(now()) @db.Timestamp(0)
+  publisher_id                      String?   @db.VarChar(255)
+  editor_id                         String?   @db.VarChar(255)
+  admin_artikel_publisher_idToadmin admin?    @relation("artikel_publisher_idToadmin", fields: [publisher_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "artikel_ibfk_1")
+  admin_artikel_editor_idToadmin    admin?    @relation("artikel_editor_idToadmin", fields: [editor_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "artikel_ibfk_2")
 
   @@index([editor_id], map: "editor_id")
   @@index([publisher_id], map: "publisher_id")
 }
 
 model aspiration_box_response {
-  email      String   @id @db.VarChar(255)
+  id         String   @id @db.VarChar(255)
+  email      String?  @db.VarChar(255)
   firstname  String?  @db.VarChar(255)
   lastname   String?  @db.VarChar(255)
   subject    String?  @db.VarChar(255)
@@ -60,89 +68,103 @@ model aspiration_box_response {
 }
 
 model division {
-  id          String         @id @db.VarChar(255)
-  type        division_type?
-  name_short  String?        @db.VarChar(255)
-  fullname    String?        @db.VarChar(255)
-  description String?        @db.VarChar(255)
+  id                String              @id @db.VarChar(255)
+  type              division_type?
+  name_short        String?             @db.VarChar(255)
+  fullname          String?             @db.VarChar(255)
+  description       String?             @db.VarChar(255)
+  division_pengurus division_pengurus[]
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model division_pengurus {
-  division_id String? @db.VarChar(255)
-  pengurus_id String? @db.VarChar(255)
-  departemen  String? @db.VarChar(255)
-  bidang      String? @db.VarChar(255)
+  id          String    @id @db.VarChar(255)
+  division_id String?   @db.VarChar(255)
+  pengurus_id String?   @db.VarChar(255)
+  departemen  String?   @db.VarChar(255)
+  bidang      String?   @db.VarChar(255)
+  division    division? @relation(fields: [division_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "division_pengurus_ibfk_1")
+  pengurus    pengurus? @relation(fields: [pengurus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "division_pengurus_ibfk_2")
 
   @@index([division_id], map: "division_id")
   @@index([pengurus_id], map: "pengurus_id")
-  @@ignore
 }
 
 model images {
-  id   String       @id @db.VarChar(255)
-  name String?      @db.VarChar(255)
-  desc String?      @db.Text
-  type images_type?
+  id           String         @id @db.VarChar(255)
+  name         String?        @db.VarChar(255)
+  desc         String?        @db.Text
+  type         images_type?
+  img_url      String?        @db.Text
+  album_images album_images[]
 }
 
 model kabinet {
-  id              String  @id @db.VarChar(255)
-  name            String? @db.VarChar(255)
-  logo_url        String? @db.VarChar(255)
-  kabinet_img_url String? @db.VarChar(255)
-  visi            String? @db.Text
-  misi            String? @db.Text
-  gubernur_id     String? @db.VarChar(255)
-  wakil_id        String? @db.VarChar(255)
+  id                                     String         @id @db.VarChar(255)
+  name                                   String?        @db.VarChar(255)
+  logo_url                               String?        @db.VarChar(255)
+  kabinet_img_url                        String?        @db.VarChar(255)
+  visi                                   String?        @db.Text
+  misi                                   String?        @db.Text
+  gubernur_id                            String?        @db.VarChar(255)
+  wakil_id                               String?        @db.VarChar(255)
+  pengurus_kabinet_gubernur_idTopengurus pengurus?      @relation("kabinet_gubernur_idTopengurus", fields: [gubernur_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "kabinet_ibfk_1")
+  pengurus_kabinet_wakil_idTopengurus    pengurus?      @relation("kabinet_wakil_idTopengurus", fields: [wakil_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "kabinet_ibfk_2")
+  profile_data                           profile_data[]
 
   @@index([gubernur_id], map: "gubernur_id")
   @@index([wakil_id], map: "wakil_id")
 }
 
 model pengurus {
-  id       String  @id @db.VarChar(255)
-  nim      String? @db.VarChar(255)
-  fullname String? @db.VarChar(255)
-  jurusan  String? @db.VarChar(255)
-  img_id   String? @db.VarChar(255)
+  id                                    String              @id @db.VarChar(255)
+  nim                                   String?             @db.VarChar(255)
+  fullname                              String?             @db.VarChar(255)
+  jurusan                               String?             @db.VarChar(255)
+  img_id                                String?             @db.VarChar(255)
+  division_pengurus                     division_pengurus[]
+  kabinet_kabinet_gubernur_idTopengurus kabinet[]           @relation("kabinet_gubernur_idTopengurus")
+  kabinet_kabinet_wakil_idTopengurus    kabinet[]           @relation("kabinet_wakil_idTopengurus")
+  pengurus_img                          pengurus_img?       @relation(fields: [img_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "pengurus_ibfk_1")
+  pengurus_contact                      pengurus_contact[]
 
   @@index([img_id], map: "img_id")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model pengurus_contact {
   id           String                         @id @db.VarChar(255)
   pengurus_id  String?                        @db.VarChar(255)
   link         String?                        @db.VarChar(255)
   contact_type pengurus_contact_contact_type?
+  pengurus     pengurus?                      @relation(fields: [pengurus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "pengurus_contact_ibfk_1")
 
   @@index([pengurus_id], map: "pengurus_id")
-  @@ignore
 }
 
 model pengurus_img {
-  id      String  @id @db.VarChar(255)
-  img_url String? @db.VarChar(255)
+  id       String     @id @db.VarChar(255)
+  img_url  String?    @db.VarChar(255)
+  pengurus pengurus[]
 }
 
 model profile_data {
-  id               String  @id @db.VarChar(255)
+  id               String   @id @db.VarChar(255)
   total_mahasiswa  Int?
   total_pengurus   Int?
   jumlah_proker    Int?
-  hero_img_url     String? @db.VarChar(255)
-  gub_img_url      String? @db.VarChar(255)
-  wagub_img_url    String? @db.VarChar(255)
-  sambutan_gub     String? @db.Text
-  sambutan_wagub   String? @db.Text
-  kabinet_aktif_id String? @db.VarChar(255)
+  hero_img_url     String?  @db.VarChar(255)
+  gub_img_url      String?  @db.VarChar(255)
+  wagub_img_url    String?  @db.VarChar(255)
+  sambutan_gub     String?  @db.Text
+  sambutan_wagub   String?  @db.Text
+  kabinet_aktif_id String?  @db.VarChar(255)
+  kabinet          kabinet? @relation(fields: [kabinet_aktif_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "profile_data_ibfk_1")
 
   @@index([kabinet_aktif_id], map: "kabinet_aktif_id")
 }
 
 model survey_response {
-  email      String   @id @db.VarChar(255)
+  id         String   @id @db.VarChar(255)
+  email      String?  @db.VarChar(255)
   nama       String?  @db.VarChar(255)
   jurusan    String?  @db.VarChar(255)
   q1         String?  @db.VarChar(255)
@@ -185,14 +207,14 @@ enum division_type {
   Dinas
 }
 
+enum images_type {
+  Photo
+  Video
+}
+
 enum pengurus_contact_contact_type {
   Instagram
   LinkedIn
   Twitter
   Meta
-}
-
-enum images_type {
-  Photo
-  Video
 }

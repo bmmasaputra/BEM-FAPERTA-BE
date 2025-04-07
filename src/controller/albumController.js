@@ -1,28 +1,24 @@
 import Joi from "joi";
-import articleService from "../service/articleService.js";
+import albumService from "../service/albumService.js";
 
-const publishArticleScheme = Joi.object({
-  title: Joi.string().max(255).required(),
-  content: Joi.string().required(),
+const addAlbumSchema = Joi.object({
+  name: Joi.string().min(3).max(255).required(),
+  desc: Joi.string().required(),
 });
 
-const editArticleScheme = Joi.object({
+const editAlbumSchema = Joi.object({
   id: Joi.string().required(),
-  title: Joi.string().max(255).required(),
-  content: Joi.string().required(),
-});
-
-const deleteArticleScheme = Joi.object({
-  id: Joi.string().required(),
+  name: Joi.string().min(3).max(255).required(),
+  desc: Joi.string().required(),
 });
 
 const idSchema = Joi.string().required();
 
 export default {
-  async publish(req, res) {
+  async add(req, res) {
     const admin = req.admin;
 
-    const { valErr } = publishArticleScheme.validate(req.body);
+    const { valErr } = addAlbumSchema.validate(req.body);
 
     if (valErr) {
       return res
@@ -32,25 +28,19 @@ export default {
 
     try {
       const body = req.body;
-      const file = req.file;
 
-      const process = await articleService.publishArticle(
-        body,
-        file.buffer,
-        admin
-      );
+      const process = await albumService.addAlbum(body, admin);
 
       if (process.status !== 201) {
         return res.status(process.status).json({
           success: false,
-          error: process.error,
           message: process.message,
         });
       }
 
       res.status(201).json({
         success: true,
-        message: "Article Published",
+        message: "Album created",
         data: process.data,
       });
     } catch (error) {
@@ -65,7 +55,7 @@ export default {
   async edit(req, res) {
     const admin = req.admin;
 
-    const { valErr } = editArticleScheme.validate(req.body);
+    const { valErr } = editAlbumSchema.validate(req.body);
 
     if (valErr) {
       return res
@@ -75,23 +65,26 @@ export default {
 
     try {
       const body = req.body;
-      const file = req.file;
 
-      const process = await articleService.editArticle(
-        body,
-        file.buffer,
-        admin
-      );
+      const process = await albumService.editAlbum(body, admin);
+
+      if (process.status !== 200) {
+        return res.status(process.status).json({
+          success: false,
+          message: process.message,
+        });
+      }
 
       res.status(200).json({
         success: true,
-        message: "Article Edited",
+        message: "Album updated",
         data: process.data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
@@ -99,7 +92,7 @@ export default {
   async remove(req, res) {
     const admin = req.admin;
 
-    const { valErr } = deleteArticleScheme.validate(req.body);
+    const { valErr } = idSchema.validate(req.body.id);
 
     if (valErr) {
       return res
@@ -108,36 +101,45 @@ export default {
     }
 
     try {
-      const { id } = req.body;
+      const id = req.body.id;
 
-      const process = await articleService.removeArticle(id);
+      const process = await albumService.removeAlbum(id, admin);
+
+      if (process.status !== 200) {
+        return res.status(process.status).json({
+          success: false,
+          message: process.message,
+        });
+      }
 
       res.status(200).json({
         success: true,
-        message: "Article Removed",
+        message: "Album deleted",
         data: process.data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
 
   async getAll(req, res) {
     try {
-      const process = await articleService.getAllArticle();
+      const process = await albumService.getAllAlbum();
 
       res.status(200).json({
         success: true,
-        message: "Article Retrieved",
-        data: process.data,
+        message: "Album retrieved",
+        data: process,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
@@ -154,25 +156,25 @@ export default {
     try {
       const id = req.params.id;
 
-      const process = await articleService.getArticleById(id);
+      const process = await albumService.getAlbumById(id);
 
       if (process.status !== 200) {
         return res.status(process.status).json({
           success: false,
-          error: process.error,
           message: process.message,
         });
       }
 
       res.status(200).json({
         success: true,
-        message: "Article Retrieved",
+        message: "Album retrieved",
         data: process.data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
