@@ -26,9 +26,9 @@ adminRouter.put(
 adminRouter.delete("/api/v1/article/remove", articleController.remove);
 
 // AlBUM API
-adminRouter.post("/api/v1/album/post", albumController.add);
-adminRouter.put("/api/v1/album/edit", albumController.edit);
-adminRouter.delete("/api/v1/album/remove", albumController.remove);
+adminRouter.post("/api/v1/album", albumController.add);
+adminRouter.put("/api/v1/album", albumController.edit);
+adminRouter.delete("/api/v1/album", albumController.remove);
 adminRouter.post(
   "/api/v1/album/photo",
   upload.single("image"),

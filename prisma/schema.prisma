@@ -21,8 +21,8 @@ model album {
   name         String?        @db.VarChar(255)
   desc         String?        @db.Text
   created_at   DateTime       @default(now()) @db.Timestamp(0)
-  photos_count Int?
-  videos_count Int?
+  photos_count Int            @default(0)
+  videos_count Int            @default(0)
   publisher_id String?        @db.VarChar(255)
   admin        admin?         @relation(fields: [publisher_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "album_ibfk_1")
   album_images album_images[]
