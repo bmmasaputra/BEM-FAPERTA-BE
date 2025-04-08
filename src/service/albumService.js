@@ -60,6 +60,12 @@ export default {
       return { status: 404, message: "Album Not Found" };
     }
 
+    await prisma.album_images.deleteMany({
+      where: {
+        album_id: id,
+      },
+    });
+
     const remove = await prisma.album.delete({
       where: { id },
     });
@@ -89,5 +95,90 @@ export default {
     }
 
     return { status: 200, data: album };
+  },
+
+  async addPhotoToAlbum(body, file) {
+    const { name, desc, album_id } = body;
+    const id = nanoid();
+    const type = "Photo";
+
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(`album/${album_id}/${id}.jpg`, file, {
+        contentType: "image/jpg",
+      });
+
+    if (error) {
+      throw new Error("Supabase Error: " + JSON.stringify(error));
+    }
+
+    const img_url = FILE_URL + data.fullPath;
+
+    const addImage = await prisma.images.create({
+      data: {
+        id,
+        name,
+        desc,
+        type,
+        img_url,
+        album_images: {
+          id: nanoid(),
+          album_id,
+          images_id: id,
+        },
+      },
+      include: {
+        album_images: true,
+      },
+    });
+
+    const incPhoto = await prisma.album.update({
+      where: {
+        id: album_id,
+      },
+      data: {
+        photos_count: {
+          increment: 1,
+        },
+      },
+    });
+
+    return { status: 201, data: addImage };
+  },
+
+  async removeImageFromAlbum(id) {
+    const findImage = await prisma.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!findImage) {
+      return { status: 404, message: "Image Not Found" };
+    }
+
+    const path = findImage.img_url.split("bucket/")[1];
+
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .delete([path]);
+
+    if (error) {
+      throw new Error("Supabase Error: " + JSON.stringify(error));
+    }
+
+    await prisma.album_images.deleteMany({
+      where: {
+        images_id: id,
+      },
+    });
+
+    const remove = await prisma.images.delete({
+      where: {
+        id,
+      },
+    });
+
+    return { status: 200, data: remove };
   },
 };

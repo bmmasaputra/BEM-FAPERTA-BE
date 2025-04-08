@@ -12,6 +12,11 @@ const editAlbumSchema = Joi.object({
   desc: Joi.string().required(),
 });
 
+const addPhotoSchema = Joi.object({
+  name: Joi.string().min(3).max(255).required(),
+  desc: Joi.string().required(),
+});
+
 const idSchema = Joi.string().required();
 
 export default {
@@ -175,6 +180,71 @@ export default {
         success: false,
         message: error.message,
         error,
+      });
+    }
+  },
+
+  async addPhoto(req, res) {
+    const admin = req.admin;
+
+    const { valErr } = addPhotoSchema.validate(req.body);
+
+    if (valErr) {
+      return res
+        .status(400)
+        .json({ success: false, message: error.details[0].message });
+    }
+
+    try {
+      const body = req.body;
+      const file = req.file;
+
+      const process = await albumService.addPhotoToAlbum(body, file);
+
+      res.status(201).json({
+        success: true,
+        message: "Image added to gallery",
+        data: process.data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error,
+      });
+    }
+  },
+
+  async removeImage(req, res) {
+    const { valErr } = idSchema.validate(req.body.id);
+
+    if (valErr) {
+      return res
+        .status(400)
+        .json({ success: false, message: error.details[0].message });
+    }
+
+    try {
+      const id = req.body.id;
+
+      const process = await albumService.removeImageFromAlbum(id);
+
+      if (process.status !== 200) {
+        return res.status(process.status).json({
+          success: false,
+          message: process.message,
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Image deleted",
+        data: process.data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
       });
     }
   },

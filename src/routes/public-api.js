@@ -5,7 +5,7 @@ import albumController from "../controller/albumController.js";
 
 const publicRouter = express.Router();
 
-// ADMIN ACTIVITY
+// ADMIN AUTH
 publicRouter.post("/api/v1/admin/init", adminController.initiate);
 publicRouter.post("/api/v1/admin/login", adminController.login);
 
