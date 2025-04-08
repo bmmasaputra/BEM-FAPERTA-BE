@@ -186,6 +186,17 @@ export default {
       },
     });
 
+    const decPhoto = await prisma.album.update({
+      where: {
+        id: album_id,
+      },
+      data: {
+        photos_count: {
+          decrement: 1
+        },
+      },
+    });
+
     return { status: 200, data: remove };
   },
 };
