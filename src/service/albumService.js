@@ -18,7 +18,7 @@ export default {
       where: { name: name },
     });
 
-    if (existingAlbum) {
+    if (!existingAlbum) {
       return { status: 400, message: "Album Already Exist" };
     }
 
@@ -80,7 +80,9 @@ export default {
 
   async getAlbumById(id) {
     const album = await prisma.album.findFirst({
-      where: id,
+      where: {
+        id,
+      },
       include: {
         album_images: {
           include: {
@@ -122,9 +124,14 @@ export default {
         type,
         img_url,
         album_images: {
-          id: nanoid(),
-          album_id,
-          images_id: id,
+          create: [
+            {
+              id: nanoid(),
+              album: {
+                connect: { id: album_id },
+              },
+            },
+          ],
         },
       },
       include: {
@@ -147,7 +154,7 @@ export default {
   },
 
   async removeImageFromAlbum(id) {
-    const findImage = await prisma.findFirst({
+    const findImage = await prisma.images.findFirst({
       where: {
         id,
       },
@@ -161,7 +168,7 @@ export default {
 
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
-      .delete([path]);
+      .remove([path]);
 
     if (error) {
       throw new Error("Supabase Error: " + JSON.stringify(error));

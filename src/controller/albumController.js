@@ -199,7 +199,7 @@ export default {
       const body = req.body;
       const file = req.file;
 
-      const process = await albumService.addPhotoToAlbum(body, file);
+      const process = await albumService.addPhotoToAlbum(body, file.buffer);
 
       res.status(201).json({
         success: true,
