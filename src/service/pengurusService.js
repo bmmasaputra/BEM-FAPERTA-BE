@@ -13,6 +13,16 @@ export default {
     const { nim, fullname, jurusan } = body;
     const id = nanoid();
 
+    const existingPengurus = await prisma.pengurus.findFirst({
+      where: { fullname },
+    });
+
+    console.log(1);
+
+    if (existingPengurus) {
+      return { status: 400, message: "Pengurus Already Exist" };
+    }
+
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
       .upload("pengurus/" + id + ".jpg", file, { contentType: "image/jpg" });
@@ -37,7 +47,7 @@ export default {
   },
 
   async editPengurus(body, file) {
-    const { id, nim, fullname, jurusan, img_url } = body;
+    const { id, nim, fullname, jurusan } = body;
 
     const findPengurus = await prisma.pengurus.findFirst({
       where: { id },
@@ -49,7 +59,7 @@ export default {
 
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
-      .upload("pengurus/" + id + ".jpg", {
+      .upload("pengurus/" + id + ".jpg", file, {
         contentType: "image/jpg",
         upsert: true,
       });
@@ -87,7 +97,7 @@ export default {
       throw new Error("Supabase Error: " + error.message);
     }
 
-    const remove = await prisma.artikel.delete({
+    const remove = await prisma.pengurus.delete({
       where: { id },
     });
 
@@ -96,7 +106,7 @@ export default {
 
   async addContact(pengurus_id, link, contact_type) {
     const findPengurus = await prisma.pengurus.findFirst({
-      where: { pengurus_id },
+      where: { id: pengurus_id },
     });
 
     if (!findPengurus) {
@@ -105,7 +115,7 @@ export default {
 
     const id = nanoid();
 
-    const add = await prisma.pengurus_contact({
+    const add = await prisma.pengurus_contact.create({
       data: {
         id,
         pengurus_id,
@@ -140,7 +150,7 @@ export default {
       },
     });
 
-    return { status: 200, data: getAll };
+    return { status: 200, data: pengurus };
   },
 
   async getPengurusById(id) {

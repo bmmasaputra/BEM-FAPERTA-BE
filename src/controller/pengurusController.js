@@ -36,7 +36,7 @@ export default {
       const body = req.body;
       const file = req.file;
 
-      const process = pengurusService.addPengurus(body, file);
+      const process = await pengurusService.addPengurus(body, file.buffer);
 
       if (process.status !== 201) {
         return res.status(process.status).json({
@@ -73,7 +73,7 @@ export default {
       const body = req.body;
       const file = req.file;
 
-      const process = await pengurusService.editPengurus(body, file);
+      const process = await pengurusService.editPengurus(body, file.buffer);
 
       if (process.status !== 200) {
         return res.status(process.status).json({
