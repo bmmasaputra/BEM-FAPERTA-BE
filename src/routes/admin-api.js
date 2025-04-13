@@ -4,6 +4,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import adminController from "../controller/adminController.js";
 import articleController from "../controller/articleController.js";
 import albumController from "../controller/albumController.js";
+import pengurusController from "../controller/pengurusController.js";
 
 const adminRouter = express.Router();
 adminRouter.use(authMiddleware);
@@ -35,5 +36,20 @@ adminRouter.post(
   albumController.addPhoto
 );
 adminRouter.delete("/api/v1/album/image", albumController.removeImage);
+
+// PENGURUS API
+adminRouter.post(
+  "/api/v1/pengurus",
+  upload.single("image"),
+  pengurusController.add
+);
+adminRouter.put(
+  "/api/v1/pengurus",
+  upload.single("image"),
+  pengurusController.edit
+);
+adminRouter.delete("/api/v1/pengurus", pengurusController.remove);
+adminRouter.post("/api/v1/pengurus/contact", pengurusController.addContact);
+adminRouter.delete("/api/v1/pengurus/contact", pengurusController.removeContact);
 
 export default adminRouter;

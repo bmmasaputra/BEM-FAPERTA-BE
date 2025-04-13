@@ -120,14 +120,11 @@ model pengurus {
   nim                                   String?             @db.VarChar(255)
   fullname                              String?             @db.VarChar(255)
   jurusan                               String?             @db.VarChar(255)
-  img_id                                String?             @db.VarChar(255)
+  img_url                               String?             @db.VarChar(255)
   division_pengurus                     division_pengurus[]
   kabinet_kabinet_gubernur_idTopengurus kabinet[]           @relation("kabinet_gubernur_idTopengurus")
   kabinet_kabinet_wakil_idTopengurus    kabinet[]           @relation("kabinet_wakil_idTopengurus")
-  pengurus_img                          pengurus_img?       @relation(fields: [img_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "pengurus_ibfk_1")
   pengurus_contact                      pengurus_contact[]
-
-  @@index([img_id], map: "img_id")
 }
 
 model pengurus_contact {
@@ -138,12 +135,6 @@ model pengurus_contact {
   pengurus     pengurus?                      @relation(fields: [pengurus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "pengurus_contact_ibfk_1")
 
   @@index([pengurus_id], map: "pengurus_id")
-}
-
-model pengurus_img {
-  id       String     @id @db.VarChar(255)
-  img_url  String?    @db.VarChar(255)
-  pengurus pengurus[]
 }
 
 model profile_data {
