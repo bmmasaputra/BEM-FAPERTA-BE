@@ -12,9 +12,9 @@ export default {
     //   success: false,
     //   message: "Access Forbiden"
     // })
-    const { valErr } = adminSchema.validate(req.body);
+    const { error } = adminSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -47,9 +47,9 @@ export default {
   async assign(req, res) {
     const admin = req.admin;
 
-    const { valErr } = adminSchema.validate(req.body);
+    const { error } = adminSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -80,9 +80,9 @@ export default {
   },
 
   async login(req, res) {
-    const { valErr } = adminSchema.validate(req.body);
+    const { error } = adminSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });

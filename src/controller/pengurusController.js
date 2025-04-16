@@ -24,9 +24,9 @@ const idSchema = Joi.string().required();
 
 export default {
   async add(req, res) {
-    const { valErr } = addPengurusSchema.validate(req.body);
+    const { error } = addPengurusSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -61,9 +61,9 @@ export default {
   },
 
   async edit(req, res) {
-    const { valErr } = editPengurusSchema.validate(req.body);
+    const { error } = editPengurusSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -98,9 +98,9 @@ export default {
   },
 
   async remove(req, res) {
-    const { valErr } = idSchema.validate(req.body.id);
+    const { error } = idSchema.validate(req.body.id);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -134,9 +134,9 @@ export default {
   },
 
   async addContact(req, res) {
-    const { valErr } = addContactSchema.validate(req.body);
+    const { error } = addContactSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -174,9 +174,9 @@ export default {
   },
 
   async removeContact(req, res) {
-    const { valErr } = idSchema.validate(req.body.id);
+    const { error } = idSchema.validate(req.body.id);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -228,9 +228,9 @@ export default {
   },
 
   async getById(req, res) {
-    const { valErr } = idSchema.validate(req.params.id);
+    const { error } = idSchema.validate(req.params.id);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });

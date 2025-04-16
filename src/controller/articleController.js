@@ -22,9 +22,9 @@ export default {
   async publish(req, res) {
     const admin = req.admin;
 
-    const { valErr } = publishArticleScheme.validate(req.body);
+    const { error } = publishArticleScheme.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -65,9 +65,9 @@ export default {
   async edit(req, res) {
     const admin = req.admin;
 
-    const { valErr } = editArticleScheme.validate(req.body);
+    const { error } = editArticleScheme.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -99,9 +99,9 @@ export default {
   async remove(req, res) {
     const admin = req.admin;
 
-    const { valErr } = deleteArticleScheme.validate(req.body);
+    const { error } = deleteArticleScheme.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -143,9 +143,9 @@ export default {
   },
 
   async getById(req, res) {
-    const { valErr } = idSchema.validate(req.params.id);
+    const { error } = idSchema.validate(req.params.id);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
