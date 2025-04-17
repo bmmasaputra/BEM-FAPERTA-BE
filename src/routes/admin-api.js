@@ -50,6 +50,18 @@ adminRouter.put(
 );
 adminRouter.delete("/api/v1/pengurus", pengurusController.remove);
 adminRouter.post("/api/v1/pengurus/contact", pengurusController.addContact);
-adminRouter.delete("/api/v1/pengurus/contact", pengurusController.removeContact);
+adminRouter.delete(
+  "/api/v1/pengurus/contact",
+  pengurusController.removeContact
+);
 
 export default adminRouter;
+
+// adminRouter.put(
+//   "/api/v1/pengurus",
+//   upload.fields([
+//     { name: "FileA", maxCount: 1 },
+//     { name: "FileB", maxCount: 1 },
+//   ]),
+//   pengurusController.edit
+// );

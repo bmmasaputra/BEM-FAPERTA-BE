@@ -29,7 +29,7 @@ const editPengurusSchema = Joi.object({
   bidang: Joi.string().max(255).required(),
 });
 
-const idSchema = Joi.string().required();
+const idSchema = Joi.string().max(255).required();
 
 export default {
   async add(req, res) {
