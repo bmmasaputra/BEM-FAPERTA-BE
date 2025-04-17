@@ -5,6 +5,8 @@ import adminController from "../controller/adminController.js";
 import articleController from "../controller/articleController.js";
 import albumController from "../controller/albumController.js";
 import pengurusController from "../controller/pengurusController.js";
+import divisionController from "../controller/divisionController.js";
+import kabinetController from "../controller/kabinetController.js";
 
 const adminRouter = express.Router();
 adminRouter.use(authMiddleware);
@@ -55,13 +57,34 @@ adminRouter.delete(
   pengurusController.removeContact
 );
 
-export default adminRouter;
+// DIVISION API
+adminRouter.post("/api/v1/division", divisionController.add);
+adminRouter.put("/api/v1/division", divisionController.edit);
+adminRouter.delete("/api/v1/division", divisionController.remove);
+adminRouter.post("/api/v1/division/pengurus", divisionController.addPengurus);
+adminRouter.put("/api/v1/division/pengurus", divisionController.editPengurus);
+adminRouter.delete(
+  "/api/v1/division/pengurus",
+  divisionController.removePengurus
+);
 
-// adminRouter.put(
-//   "/api/v1/pengurus",
-//   upload.fields([
-//     { name: "FileA", maxCount: 1 },
-//     { name: "FileB", maxCount: 1 },
-//   ]),
-//   pengurusController.edit
-// );
+// KABINET API
+adminRouter.post(
+  "/api/v1/pengurus",
+  upload.fields([
+    { name: "logo", maxCount: 1 },
+    { name: "image", maxCount: 1 },
+  ]),
+  kabinetController.add
+);
+adminRouter.put(
+  "/api/v1/pengurus",
+  upload.fields([
+    { name: "logo", maxCount: 1 },
+    { name: "image", maxCount: 1 },
+  ]),
+  kabinetController.put
+);
+adminRouter.delete("/api/v1/pengurus", kabinetController.remove);
+
+export default adminRouter;
