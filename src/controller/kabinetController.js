@@ -1,5 +1,5 @@
 import Joi from "joi";
-import kabinetService from "../service/kabinetService";
+import kabinetService from "../service/kabinetService.js";
 
 const addKabinetSchema = Joi.object({
   name: Joi.string().max(255).required(),
@@ -35,7 +35,7 @@ export default {
       const image = req.files["image"][0];
       const body = req.body;
 
-      const process = await kabinetService.addKabinet(body, logo, image);
+      const process = await kabinetService.addKabinet(body, logo.buffer, image.buffer);
 
       if (process.status !== 201) {
         return res.status(process.status).json({
@@ -73,7 +73,7 @@ export default {
       const image = req.files["image"][0];
       const body = req.body;
 
-      const process = await kabinetService.editKabinet(body, logo, image);
+      const process = await kabinetService.editKabinet(body, logo.buffer, image.buffer);
 
       if (process.status !== 200) {
         return res.status(process.status).json({

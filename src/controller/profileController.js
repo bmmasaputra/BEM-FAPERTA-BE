@@ -5,7 +5,7 @@ import profileService from "../service/profileService.js";
 const statsSchema = Joi.object({
   total_mahasiswa: Joi.number().required(),
   total_pengurus: Joi.number().required(),
-  jumlah_poker: Joi.number().required(),
+  jumlah_proker: Joi.number().required(),
   sambutan_gub: Joi.string().required(),
   sambutan_wagub: Joi.string().required(),
 });
@@ -42,7 +42,12 @@ export default {
       const wagub = req.files["wagub"][0];
       const body = req.body;
 
-      const process = await profileService.init(body, hero, gub, wagub);
+      const process = await profileService.init(
+        body,
+        hero.buffer,
+        gub.buffer,
+        wagub.buffer
+      );
 
       res.status(process.status).json({
         success: true,
@@ -121,7 +126,7 @@ export default {
   async updateHero(req, res) {
     try {
       const hero = req.files["hero"][0];
-      const process = await profileService.updateHero(hero);
+      const process = await profileService.updateHero(hero.buffer);
 
       res.status(process.status).json({
         success: true,
@@ -140,7 +145,7 @@ export default {
   async updateGub(req, res) {
     try {
       const gub = req.files["gub"][0];
-      const process = await profileService.updateGub(gub);
+      const process = await profileService.updateGub(gub.buffer);
 
       res.status(process.status).json({
         success: true,
@@ -159,7 +164,7 @@ export default {
   async updateWagub(req, res) {
     try {
       const wagub = req.files["wagub"][0];
-      const process = await profileService.updateWagub(wagub);
+      const process = await profileService.updateWagub(wagub.buffer);
 
       res.status(process.status).json({
         success: true,

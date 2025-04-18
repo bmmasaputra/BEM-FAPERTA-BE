@@ -10,13 +10,13 @@ const extension = ".jpg";
 
 export default {
   async addDivision(type, name_short, fullname, description) {
-    const exisitingDivision = await prisma.division.findFirst({
+    const existingDivision = await prisma.division.findFirst({
       where: {
-        OR: [name_short, fullname],
+        OR: [{ name_short: name_short }, { fullname: fullname }],
       },
     });
 
-    if (exisitingDivision) {
+    if (existingDivision) {
       return { status: 400, message: "Division Already Exist" };
     }
 
@@ -73,13 +73,13 @@ export default {
   },
 
   async addPengurusDivision(pengurus_id, division_id, departemen, bidang) {
-    const exisitingDivision = await prisma.division_pengurus.findFirst({
+    const existingDivision = await prisma.division_pengurus.findFirst({
       where: {
-        AND: [division_id, pengurus_id],
+        AND: [{ division_id }, { pengurus_id }],
       },
     });
 
-    if (exisitingDivision) {
+    if (existingDivision) {
       return { status: 400, message: "Pengurus Already Added to Divison" };
     }
 

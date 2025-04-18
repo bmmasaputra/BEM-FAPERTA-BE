@@ -2,7 +2,6 @@ import prisma from "../../prisma/prismaClient.js";
 import supabase from "../../lib/supabase/supabaseClient.js";
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
-import { status } from "express/lib/response.js";
 
 dotenv.config();
 const BUCKET_NAME = process.env.BUCKET_NAME;
@@ -14,7 +13,7 @@ export default {
     const {
       total_mahasiswa,
       total_pengurus,
-      jumlah_poker,
+      jumlah_proker,
       sambutan_gub,
       sambutan_wagub,
     } = body;
@@ -24,6 +23,7 @@ export default {
       .from(BUCKET_NAME)
       .upload("profile/hero/" + id + extension, hero, {
         contentType: "image/jpg",
+        upsert: true,
       });
 
     if (error1) {
@@ -34,6 +34,7 @@ export default {
       .from(BUCKET_NAME)
       .upload("profile/gub/" + id + extension, gub, {
         contentType: "image/jpg",
+        upsert: true,
       });
 
     if (error2) {
@@ -44,6 +45,7 @@ export default {
       .from(BUCKET_NAME)
       .upload("profile/wagub/" + id + extension, wagub, {
         contentType: "image/jpg",
+        upsert: true,
       });
 
     if (error3) {
@@ -57,9 +59,9 @@ export default {
     const profile = await prisma.profile_data.create({
       data: {
         id,
-        total_mahasiswa,
-        total_pengurus,
-        jumlah_poker,
+        total_mahasiswa: +total_mahasiswa,
+        total_pengurus: +total_pengurus,
+        jumlah_proker: +jumlah_proker,
         hero_img_url,
         gub_img_url,
         wagub_img_url,
@@ -91,9 +93,9 @@ export default {
         id: "1",
       },
       data: {
-        total_mahasiswa,
-        total_pengurus,
-        jumlah_proker,
+        total_mahasiswa: +total_mahasiswa,
+        total_pengurus: +total_pengurus,
+        jumlah_proker: +jumlah_proker,
       },
     });
 

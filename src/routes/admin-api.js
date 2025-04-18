@@ -84,7 +84,7 @@ adminRouter.put(
     { name: "logo", maxCount: 1 },
     { name: "image", maxCount: 1 },
   ]),
-  kabinetController.put
+  kabinetController.edit
 );
 adminRouter.delete("/api/v1/kabinet", kabinetController.remove);
 

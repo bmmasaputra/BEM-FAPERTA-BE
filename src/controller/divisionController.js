@@ -85,7 +85,7 @@ export default {
     try {
       const { id, type, name_short, fullname, description } = req.body;
 
-      const process = await divisionService.editDivison(
+      const process = await divisionService.editDivision(
         id,
         type,
         name_short,
@@ -127,7 +127,7 @@ export default {
     try {
       const id = req.body.id;
 
-      const process = await divisionService.removeDivison(id);
+      const process = await divisionService.removeDivision(id);
 
       if (process.status !== 200) {
         return res.status(process.status).json({
@@ -270,7 +270,7 @@ export default {
 
   async getAll(req, res) {
     try {
-      const process = divisionService.getAllDivision();
+      const process = await divisionService.getAllDivision();
 
       res.status(200).json({
         success: true,

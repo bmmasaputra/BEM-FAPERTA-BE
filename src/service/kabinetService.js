@@ -2,7 +2,6 @@ import prisma from "../../prisma/prismaClient.js";
 import supabase from "../../lib/supabase/supabaseClient.js";
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
-import { status } from "express/lib/response.js";
 
 dotenv.config();
 const BUCKET_NAME = process.env.BUCKET_NAME;
