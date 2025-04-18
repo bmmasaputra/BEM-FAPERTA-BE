@@ -23,9 +23,9 @@ export default {
   async add(req, res) {
     const admin = req.admin;
 
-    const { valErr } = addAlbumSchema.validate(req.body);
+    const { error } = addAlbumSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -60,9 +60,9 @@ export default {
   async edit(req, res) {
     const admin = req.admin;
 
-    const { valErr } = editAlbumSchema.validate(req.body);
+    const { error } = editAlbumSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -97,9 +97,9 @@ export default {
   async remove(req, res) {
     const admin = req.admin;
 
-    const { valErr } = idSchema.validate(req.body.id);
+    const { error } = idSchema.validate(req.body.id);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -150,9 +150,9 @@ export default {
   },
 
   async getById(req, res) {
-    const { valErr } = idSchema.validate(req.params.id);
+    const { error } = idSchema.validate(req.params.id);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -187,9 +187,9 @@ export default {
   async addPhoto(req, res) {
     const admin = req.admin;
 
-    const { valErr } = addPhotoSchema.validate(req.body);
+    const { error } = addPhotoSchema.validate(req.body);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });
@@ -216,9 +216,9 @@ export default {
   },
 
   async removeImage(req, res) {
-    const { valErr } = idSchema.validate(req.body.id);
+    const { error } = idSchema.validate(req.body.id);
 
-    if (valErr) {
+    if (error) {
       return res
         .status(400)
         .json({ success: false, message: error.details[0].message });

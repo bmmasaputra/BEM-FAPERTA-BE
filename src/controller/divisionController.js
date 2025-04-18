@@ -1,30 +1,39 @@
 import Joi from "joi";
-import pengurusService from "../service/pengurusService.js";
+import divisionService from "../service/divisionService.js";
+
+const addDivisionSchema = Joi.object({
+  type: Joi.string().valid("Biro", "Dinas").required(),
+  name_short: Joi.string().max(255).required(),
+  fullname: Joi.string().max(255).required(),
+  description: Joi.string().required(),
+});
+
+const editDivisionSchema = Joi.object({
+  id: Joi.string().required(),
+  type: Joi.string().valid("Biro", "Dinas").required(),
+  name_short: Joi.string().max(255).required(),
+  fullname: Joi.string().max(255).required(),
+  description: Joi.string().required(),
+});
 
 const addPengurusSchema = Joi.object({
-  nim: Joi.string().max(255).required(),
-  fullname: Joi.string().max(255).required(),
-  jurusan: Joi.string().max(255).required(),
+  pengurus_id: Joi.string().max(255).required(),
+  division_id: Joi.string().max(255).required(),
+  departemen: Joi.string().max(255).required(),
+  bidang: Joi.string().max(255).required(),
 });
 
 const editPengurusSchema = Joi.object({
   id: Joi.string().required(),
-  nim: Joi.string().max(255).required(),
-  fullname: Joi.string().max(255).required(),
-  jurusan: Joi.string().max(255).required(),
+  departemen: Joi.string().max(255).required(),
+  bidang: Joi.string().max(255).required(),
 });
 
-const addContactSchema = Joi.object({
-  pengurus_id: Joi.string().required(),
-  link: Joi.string().max(255).required(),
-  contact_type: Joi.string().required(),
-});
-
-const idSchema = Joi.string().required();
+const idSchema = Joi.string().max(255).required();
 
 export default {
   async add(req, res) {
-    const { error } = addPengurusSchema.validate(req.body);
+    const { error } = addDivisionSchema.validate(req.body);
 
     if (error) {
       return res
@@ -33,10 +42,14 @@ export default {
     }
 
     try {
-      const body = req.body;
-      const file = req.file;
+      const { type, name_short, fullname, description } = req.body;
 
-      const process = await pengurusService.addPengurus(body, file.buffer);
+      const process = await divisionService.addDivision(
+        type,
+        name_short,
+        fullname,
+        description
+      );
 
       if (process.status !== 201) {
         return res.status(process.status).json({
@@ -48,7 +61,7 @@ export default {
 
       res.status(201).json({
         success: true,
-        message: "Pengurus Added",
+        message: "Division Added",
         data: process.data,
       });
     } catch (error) {
@@ -61,7 +74,7 @@ export default {
   },
 
   async edit(req, res) {
-    const { error } = editPengurusSchema.validate(req.body);
+    const { error } = editDivisionSchema.validate(req.body);
 
     if (error) {
       return res
@@ -70,10 +83,15 @@ export default {
     }
 
     try {
-      const body = req.body;
-      const file = req.file;
+      const { id, type, name_short, fullname, description } = req.body;
 
-      const process = await pengurusService.editPengurus(body, file.buffer);
+      const process = await divisionService.editDivision(
+        id,
+        type,
+        name_short,
+        fullname,
+        description
+      );
 
       if (process.status !== 200) {
         return res.status(process.status).json({
@@ -85,7 +103,7 @@ export default {
 
       res.status(200).json({
         success: true,
-        message: "Pengurus Updated",
+        message: "Division Updated",
         data: process.data,
       });
     } catch (error) {
@@ -109,7 +127,7 @@ export default {
     try {
       const id = req.body.id;
 
-      const process = await pengurusService.removePengurus(id);
+      const process = await divisionService.removeDivision(id);
 
       if (process.status !== 200) {
         return res.status(process.status).json({
@@ -121,7 +139,7 @@ export default {
 
       res.status(200).json({
         success: true,
-        message: "Pengurus Removed",
+        message: "Division Removed",
         data: process.data,
       });
     } catch (error) {
@@ -133,8 +151,8 @@ export default {
     }
   },
 
-  async addContact(req, res) {
-    const { error } = addContactSchema.validate(req.body);
+  async addPengurus(req, res) {
+    const { error } = addPengurusSchema.validate(req.body);
 
     if (error) {
       return res
@@ -143,12 +161,13 @@ export default {
     }
 
     try {
-      const { pengurus_id, link, contact_type } = req.body;
+      const { pengurus_id, division_id, departemen, bidang } = req.body;
 
-      const process = await pengurusService.addContact(
+      const process = await divisionService.addPengurusDivision(
         pengurus_id,
-        link,
-        contact_type
+        division_id,
+        departemen,
+        bidang
       );
 
       if (process.status !== 201) {
@@ -161,7 +180,7 @@ export default {
 
       res.status(201).json({
         success: true,
-        message: "Contact Added",
+        message: "Pengurus Added to Division",
         data: process.data,
       });
     } catch (error) {
@@ -173,8 +192,8 @@ export default {
     }
   },
 
-  async removeContact(req, res) {
-    const { error } = idSchema.validate(req.body.id);
+  async editPengurus(req, res) {
+    const { error } = editPengurusSchema.validate(req.body);
 
     if (error) {
       return res
@@ -183,9 +202,13 @@ export default {
     }
 
     try {
-      const id = req.body.id;
+      const { id, departemen, bidang } = req.body;
 
-      const process = await pengurusService.removeContact(id);
+      const process = await divisionService.editPengurusDivision(
+        id,
+        departemen,
+        bidang
+      );
 
       if (process.status !== 200) {
         return res.status(process.status).json({
@@ -197,7 +220,43 @@ export default {
 
       res.status(200).json({
         success: true,
-        message: "Contact Removed",
+        message: "Pengurus Edited",
+        data: process.data,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error,
+      });
+    }
+  },
+
+  async removePengurus(req, res) {
+    const { error } = idSchema.validate(req.body.id);
+
+    if (error) {
+      return res
+        .status(400)
+        .json({ success: false, message: error.details[0].message });
+    }
+
+    try {
+      const id = req.body.id;
+
+      const process = await divisionService.removePengurusDivision(id);
+
+      if (process.status !== 200) {
+        return res.status(process.status).json({
+          success: false,
+          error: process.error,
+          message: process.message,
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Pengurus Removed From Division",
         data: process.data,
       });
     } catch (error) {
@@ -211,11 +270,11 @@ export default {
 
   async getAll(req, res) {
     try {
-      const process = await pengurusService.getAllPengurus();
+      const process = await divisionService.getAllDivision();
 
       res.status(200).json({
         success: true,
-        message: "Pengurus Retrieved",
+        message: "Division Retrieved",
         data: process.data,
       });
     } catch (error) {
@@ -227,7 +286,7 @@ export default {
     }
   },
 
-  async getById(req, res) {
+  async geById(req, res) {
     const { error } = idSchema.validate(req.params.id);
 
     if (error) {
@@ -239,7 +298,7 @@ export default {
     try {
       const id = req.params.id;
 
-      const process = await pengurusService.getPengurusById(id);
+      const process = await divisionService.getDivisionById(id);
 
       if (process.status !== 200) {
         return res.status(process.status).json({
@@ -251,7 +310,7 @@ export default {
 
       res.status(200).json({
         success: true,
-        message: "Pengurus Retrieved",
+        message: "Division Retrieved",
         data: process.data,
       });
     } catch (error) {

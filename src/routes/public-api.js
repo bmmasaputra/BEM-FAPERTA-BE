@@ -3,6 +3,9 @@ import adminController from "../controller/adminController.js";
 import articleController from "../controller/articleController.js";
 import albumController from "../controller/albumController.js";
 import pengurusController from "../controller/pengurusController.js";
+import divisionController from "../controller/divisionController.js";
+import kabinetController from "../controller/kabinetController.js";
+import profileController from "../controller/profileController.js";
 
 const publicRouter = express.Router();
 
@@ -18,8 +21,19 @@ publicRouter.get("/api/v1/article/:id", articleController.getById);
 publicRouter.get("/api/v1/album", albumController.getAll);
 publicRouter.get("/api/v1/album/:id", albumController.getById);
 
-// Pengurus API
+// PENGURUS API
 publicRouter.get("/api/v1/pengurus", pengurusController.getAll);
 publicRouter.get("/api/v1/pengurus/:id", pengurusController.getById);
+
+// DIVISION API
+publicRouter.get("/api/v1/division", divisionController.getAll);
+publicRouter.get("/api/v1/division/:id", divisionController.geById);
+
+// KABINET API
+publicRouter.get("/api/v1/kabinet", kabinetController.getAll);
+publicRouter.get("/api/v1/kabinet/:id", kabinetController.getById);
+
+// PROFILE API
+publicRouter.get("/api/v1/profile", profileController.getProfile);
 
 export default publicRouter;

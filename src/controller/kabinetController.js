@@ -1,28 +1,28 @@
 import Joi from "joi";
-import articleService from "../service/articleService.js";
+import kabinetService from "../service/kabinetService.js";
 
-const publishArticleScheme = Joi.object({
-  title: Joi.string().max(255).required(),
-  content: Joi.string().required(),
+const addKabinetSchema = Joi.object({
+  name: Joi.string().max(255).required(),
+  visi: Joi.string().required(),
+  misi: Joi.string().required(),
+  gubernur_id: Joi.string().max(255).required(),
+  wakil_id: Joi.string().max(255).required(),
 });
 
-const editArticleScheme = Joi.object({
-  id: Joi.string().required(),
-  title: Joi.string().max(255).required(),
-  content: Joi.string().required(),
+const editKabinetSchema = Joi.object({
+  id: Joi.string().max(255).required(),
+  name: Joi.string().required(),
+  visi: Joi.string().required(),
+  misi: Joi.string().required(),
+  gubernur_id: Joi.string().max(255).required(),
+  wakil_id: Joi.string().max(255).required(),
 });
 
-const deleteArticleScheme = Joi.object({
-  id: Joi.string().required(),
-});
-
-const idSchema = Joi.string().required();
+const idSchema = Joi.string().max(255).required();
 
 export default {
-  async publish(req, res) {
-    const admin = req.admin;
-
-    const { error } = publishArticleScheme.validate(req.body);
+  async add(req, res) {
+    const { error } = addKabinetSchema.validate(req.body);
 
     if (error) {
       return res
@@ -31,14 +31,11 @@ export default {
     }
 
     try {
+      const logo = req.files["logo"][0];
+      const image = req.files["image"][0];
       const body = req.body;
-      const file = req.file;
 
-      const process = await articleService.publishArticle(
-        body,
-        file.buffer,
-        admin
-      );
+      const process = await kabinetService.addKabinet(body, logo.buffer, image.buffer);
 
       if (process.status !== 201) {
         return res.status(process.status).json({
@@ -50,7 +47,7 @@ export default {
 
       res.status(201).json({
         success: true,
-        message: "Article Published",
+        message: "Kabinet Added",
         data: process.data,
       });
     } catch (error) {
@@ -63,9 +60,7 @@ export default {
   },
 
   async edit(req, res) {
-    const admin = req.admin;
-
-    const { error } = editArticleScheme.validate(req.body);
+    const { error } = editKabinetSchema.validate(req.body);
 
     if (error) {
       return res
@@ -74,32 +69,36 @@ export default {
     }
 
     try {
+      const logo = req.files["logo"][0];
+      const image = req.files["image"][0];
       const body = req.body;
-      const file = req.file;
 
-      const process = await articleService.editArticle(
-        body,
-        file.buffer,
-        admin
-      );
+      const process = await kabinetService.editKabinet(body, logo.buffer, image.buffer);
+
+      if (process.status !== 200) {
+        return res.status(process.status).json({
+          success: false,
+          error: process.error,
+          message: process.message,
+        });
+      }
 
       res.status(200).json({
         success: true,
-        message: "Article Edited",
+        message: "Kabinet Updated",
         data: process.data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
 
   async remove(req, res) {
-    const admin = req.admin;
-
-    const { error } = deleteArticleScheme.validate(req.body);
+    const { error } = idSchema.validate(req.body.id);
 
     if (error) {
       return res
@@ -108,36 +107,46 @@ export default {
     }
 
     try {
-      const { id } = req.body;
+      const id = req.body.id;
 
-      const process = await articleService.removeArticle(id);
+      const process = await kabinetService.removeKabinet(id);
+
+      if (process.status !== 200) {
+        return res.status(process.status).json({
+          success: false,
+          error: process.error,
+          message: process.message,
+        });
+      }
 
       res.status(200).json({
         success: true,
-        message: "Article Removed",
+        message: "Kabinet Removed",
         data: process.data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
 
   async getAll(req, res) {
     try {
-      const process = await articleService.getAllArticle();
+      const process = await kabinetService.getAllKabinet();
 
       res.status(200).json({
         success: true,
-        message: "Article Retrieved",
+        message: "Kabinet Retrieved",
         data: process.data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
@@ -154,7 +163,7 @@ export default {
     try {
       const id = req.params.id;
 
-      const process = await articleService.getArticleById(id);
+      const process = await kabinetService.getKabinetById(id);
 
       if (process.status !== 200) {
         return res.status(process.status).json({
@@ -166,13 +175,14 @@ export default {
 
       res.status(200).json({
         success: true,
-        message: "Article Retrieved",
+        message: "Kabinet Retrieved",
         data: process.data,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         message: error.message,
+        error,
       });
     }
   },
