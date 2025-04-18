@@ -7,6 +7,7 @@ import albumController from "../controller/albumController.js";
 import pengurusController from "../controller/pengurusController.js";
 import divisionController from "../controller/divisionController.js";
 import kabinetController from "../controller/kabinetController.js";
+import profileController from "../controller/profileController.js";
 
 const adminRouter = express.Router();
 adminRouter.use(authMiddleware);
@@ -70,7 +71,7 @@ adminRouter.delete(
 
 // KABINET API
 adminRouter.post(
-  "/api/v1/pengurus",
+  "/api/v1/kabinet",
   upload.fields([
     { name: "logo", maxCount: 1 },
     { name: "image", maxCount: 1 },
@@ -78,13 +79,42 @@ adminRouter.post(
   kabinetController.add
 );
 adminRouter.put(
-  "/api/v1/pengurus",
+  "/api/v1/kabinet",
   upload.fields([
     { name: "logo", maxCount: 1 },
     { name: "image", maxCount: 1 },
   ]),
   kabinetController.put
 );
-adminRouter.delete("/api/v1/pengurus", kabinetController.remove);
+adminRouter.delete("/api/v1/kabinet", kabinetController.remove);
+
+// PROFILE API
+adminRouter.post(
+  "/api/v1/profile/init",
+  upload.fields([
+    { name: "hero", maxCount: 1 },
+    { name: "gub", maxCount: 1 },
+    { name: "wagub", maxCount: 1 },
+  ]),
+  profileController.init
+);
+adminRouter.put("/api/v1/profile/active", profileController.setActiveKabinet);
+adminRouter.put("/api/v1/profile/stats", profileController.updateStats);
+adminRouter.put(
+  "/api/v1/profile/hero",
+  upload.fields([{ name: "hero", maxCount: 1 }]),
+  profileController.updateHero
+);
+adminRouter.put(
+  "/api/v1/profile/gub",
+  upload.fields([{ name: "gub", maxCount: 1 }]),
+  profileController.updateGub
+);
+adminRouter.put(
+  "/api/v1/profile/wagub",
+  upload.fields([{ name: "wagub", maxCount: 1 }]),
+  profileController.updateWagub
+);
+adminRouter.put("/api/v1/profile/sambutan", profileController.updateSambutan);
 
 export default adminRouter;

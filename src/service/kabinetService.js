@@ -21,7 +21,7 @@ export default {
       });
 
     if (errorLogo) {
-      throw new Error("Supabase Error: " + error.message);
+      throw new Error("Supabase Error: " + errorLogo.message);
     }
 
     const { data: dataImage, error: errorImage } = await supabase.storage
@@ -31,7 +31,7 @@ export default {
       });
 
     if (errorImage) {
-      throw new Error("Supabase Error: " + error.message);
+      throw new Error("Supabase Error: " + errorImage.message);
     }
 
     const logo_url = FILE_URL + dataLogo.fullPath;
@@ -70,7 +70,7 @@ export default {
       });
 
     if (errorLogo) {
-      throw new Error("Supabase Error: " + error.message);
+      throw new Error("Supabase Error: " + errorLogo.message);
     }
 
     const { data: dataImage, error: errorImage } = await supabase.storage
@@ -81,7 +81,7 @@ export default {
       });
 
     if (errorImage) {
-      throw new Error("Supabase Error: " + error.message);
+      throw new Error("Supabase Error: " + errorImage.message);
     }
 
     const kabinet = await prisma.kabinet.update({
