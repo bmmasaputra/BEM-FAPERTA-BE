@@ -21,7 +21,7 @@ export default {
       throw new Error("Supabase Error: " + error.message);
     }
 
-    const logoUrl = FILE_URL + data.fullPath;
+    const logo_url = FILE_URL + data.fullPath;
 
     const ukm = await prisma.ukm.create({
       data: {
@@ -29,7 +29,7 @@ export default {
         name,
         description,
         url_link,
-        logoUrl,
+        logo_url,
       },
     });
 
