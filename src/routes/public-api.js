@@ -7,6 +7,7 @@ import divisionController from "../controller/divisionController.js";
 import kabinetController from "../controller/kabinetController.js";
 import profileController from "../controller/profileController.js";
 import ukmController from "../controller/ukmController.js";
+import aspirationController from "../controller/aspirationController.js";
 
 const publicRouter = express.Router();
 
@@ -38,6 +39,9 @@ publicRouter.get("/api/v1/kabinet/:id", kabinetController.getById);
 publicRouter.get("/api/v1/profile", profileController.getProfile);
 
 // UKM API
-publicRouter.get("api/v1/ukm", ukmController.getAll);
+publicRouter.get("/api/v1/ukm", ukmController.getAll);
+
+// ASPIRATION API
+publicRouter.post("/api/v1/aspiration", aspirationController.submit);
 
 export default publicRouter;
