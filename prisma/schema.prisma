@@ -191,6 +191,7 @@ model ukm {
   name        String? @db.VarChar(255)
   description String? @db.VarChar(255)
   url_link    String? @db.VarChar(255)
+  logo_url    String  @db.VarChar(255)
 }
 
 enum division_type {

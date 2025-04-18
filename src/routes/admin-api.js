@@ -8,6 +8,8 @@ import pengurusController from "../controller/pengurusController.js";
 import divisionController from "../controller/divisionController.js";
 import kabinetController from "../controller/kabinetController.js";
 import profileController from "../controller/profileController.js";
+import ukmController from "../controller/ukmController.js";
+import aspirationController from "../controller/aspirationController.js";
 
 const adminRouter = express.Router();
 adminRouter.use(authMiddleware);
@@ -116,5 +118,20 @@ adminRouter.put(
   profileController.updateWagub
 );
 adminRouter.put("/api/v1/profile/sambutan", profileController.updateSambutan);
+
+// UKM API
+adminRouter.post("/api/v1/ukm", upload.single("logo"), ukmController.add);
+adminRouter.put("/api/v1/ukm", ukmController.edit);
+adminRouter.put(
+  "/api/v1/ukm/logo",
+  upload.single("logo"),
+  ukmController.editLogo
+);
+adminRouter.delete("/api/v1/ukm", ukmController.remove);
+
+// ASPIRATION API
+adminRouter.get("/api/v1/aspiration", aspirationController.getAll);
+adminRouter.get("/api/v1/aspiration/:id", aspirationController.getById);
+adminRouter.delete("/api/v1/aspiration", aspirationController.remove);
 
 export default adminRouter;
