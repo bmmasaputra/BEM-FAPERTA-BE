@@ -8,6 +8,7 @@ import pengurusController from "../controller/pengurusController.js";
 import divisionController from "../controller/divisionController.js";
 import kabinetController from "../controller/kabinetController.js";
 import profileController from "../controller/profileController.js";
+import ukmController from "../controller/ukmController.js";
 
 const adminRouter = express.Router();
 adminRouter.use(authMiddleware);
@@ -116,5 +117,15 @@ adminRouter.put(
   profileController.updateWagub
 );
 adminRouter.put("/api/v1/profile/sambutan", profileController.updateSambutan);
+
+// UKM API
+adminRouter.post("/api/v1/ukm", upload.single("logo"), ukmController.add);
+adminRouter.put("/api/v1/ukm", ukmController.edit);
+adminRouter.put(
+  "/api/v1/ukm/logo",
+  upload.single("logo"),
+  ukmController.editLogo
+);
+adminRouter.delete("/api/v1/ukm", ukmController.remove);
 
 export default adminRouter;

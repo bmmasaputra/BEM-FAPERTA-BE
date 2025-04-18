@@ -6,6 +6,7 @@ import pengurusController from "../controller/pengurusController.js";
 import divisionController from "../controller/divisionController.js";
 import kabinetController from "../controller/kabinetController.js";
 import profileController from "../controller/profileController.js";
+import ukmController from "../controller/ukmController.js";
 
 const publicRouter = express.Router();
 
@@ -35,5 +36,8 @@ publicRouter.get("/api/v1/kabinet/:id", kabinetController.getById);
 
 // PROFILE API
 publicRouter.get("/api/v1/profile", profileController.getProfile);
+
+// UKM API
+publicRouter.get("api/v1/ukm", ukmController.getAll);
 
 export default publicRouter;
