@@ -2,10 +2,9 @@ import app from "../app.js";
 import dotenv from "dotenv";
 
 dotenv.config();
-const port = process.env.PORT;
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
+app.listen(3000, () => {
+  console.log(`App running on port ${3000}`);
 });
 
 export default app;
