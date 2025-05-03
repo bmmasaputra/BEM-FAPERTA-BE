@@ -15,6 +15,7 @@ const editAlbumSchema = Joi.object({
 const addPhotoSchema = Joi.object({
   name: Joi.string().min(3).max(255).required(),
   desc: Joi.string().required(),
+  album_id: Joi.string().required(),
 });
 
 const idSchema = Joi.string().required();

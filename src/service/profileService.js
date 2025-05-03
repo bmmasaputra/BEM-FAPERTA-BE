@@ -13,7 +13,7 @@ export default {
     const {
       total_mahasiswa,
       total_pengurus,
-      jumlah_proker,
+      jumlah_proker, 
       sambutan_gub,
       sambutan_wagub,
     } = body;
