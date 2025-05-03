@@ -158,6 +158,9 @@ export default {
       where: {
         id,
       },
+      include: {
+        album_images: true,
+      }
     });
 
     if (!findImage) {
@@ -188,7 +191,7 @@ export default {
 
     const decPhoto = await prisma.album.update({
       where: {
-        id: album_id,
+        id: findImage.album_images[0].album_id, // Temporaruy fix
       },
       data: {
         photos_count: {

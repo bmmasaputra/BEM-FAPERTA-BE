@@ -24,7 +24,7 @@ model album {
   photos_count Int            @default(0)
   videos_count Int            @default(0)
   publisher_id String?        @db.VarChar(255)
-  admin        admin?         @relation(fields: [publisher_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "album_ibfk_1")
+  admin        admin?         @relation(fields: [publisher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "album_ibfk_1")
   album_images album_images[]
 
   @@index([publisher_id], map: "publisher_id")
@@ -34,8 +34,8 @@ model album_images {
   id        String  @id @db.VarChar(255)
   album_id  String? @db.VarChar(255)
   images_id String? @db.VarChar(255)
-  album     album?  @relation(fields: [album_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "album_images_ibfk_1")
-  images    images? @relation(fields: [images_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "album_images_ibfk_2")
+  album     album?  @relation(fields: [album_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "album_images_ibfk_1")
+  images    images? @relation(fields: [images_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "album_images_ibfk_2")
 
   @@index([album_id], map: "album_id")
   @@index([images_id], map: "images_id")
@@ -50,8 +50,8 @@ model artikel {
   edited_at                         DateTime? @default(now()) @db.Timestamp(0)
   publisher_id                      String?   @db.VarChar(255)
   editor_id                         String?   @db.VarChar(255)
-  admin_artikel_publisher_idToadmin admin?    @relation("artikel_publisher_idToadmin", fields: [publisher_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "artikel_ibfk_1")
-  admin_artikel_editor_idToadmin    admin?    @relation("artikel_editor_idToadmin", fields: [editor_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "artikel_ibfk_2")
+  admin_artikel_publisher_idToadmin admin?    @relation("artikel_publisher_idToadmin", fields: [publisher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
+  admin_artikel_editor_idToadmin    admin?    @relation("artikel_editor_idToadmin", fields: [editor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_2")
 
   @@index([editor_id], map: "editor_id")
   @@index([publisher_id], map: "publisher_id")
@@ -82,11 +82,11 @@ model division_pengurus {
   pengurus_id String?   @db.VarChar(255)
   departemen  String?   @db.VarChar(255)
   bidang      String?   @db.VarChar(255)
-  division    division? @relation(fields: [division_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "division_pengurus_ibfk_1")
-  pengurus    pengurus? @relation(fields: [pengurus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "division_pengurus_ibfk_2")
+  division    division? @relation(fields: [division_id], references: [id], onDelete: Cascade, map: "division_pengurus_ibfk_1")
+  pengurus    pengurus? @relation(fields: [pengurus_id], references: [id], onDelete: Cascade, map: "division_pengurus_ibfk_2")
 
-  @@index([division_id], map: "division_id")
-  @@index([pengurus_id], map: "pengurus_id")
+  @@index([division_id], map: "division_pengurus_ibfk_1")
+  @@index([pengurus_id], map: "division_pengurus_ibfk_2")
 }
 
 model images {
@@ -107,8 +107,8 @@ model kabinet {
   misi                                   String?        @db.Text
   gubernur_id                            String?        @db.VarChar(255)
   wakil_id                               String?        @db.VarChar(255)
-  pengurus_kabinet_gubernur_idTopengurus pengurus?      @relation("kabinet_gubernur_idTopengurus", fields: [gubernur_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "kabinet_ibfk_1")
-  pengurus_kabinet_wakil_idTopengurus    pengurus?      @relation("kabinet_wakil_idTopengurus", fields: [wakil_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "kabinet_ibfk_2")
+  pengurus_kabinet_gubernur_idTopengurus pengurus?      @relation("kabinet_gubernur_idTopengurus", fields: [gubernur_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "kabinet_ibfk_1")
+  pengurus_kabinet_wakil_idTopengurus    pengurus?      @relation("kabinet_wakil_idTopengurus", fields: [wakil_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "kabinet_ibfk_2")
   profile_data                           profile_data[]
 
   @@index([gubernur_id], map: "gubernur_id")
@@ -132,7 +132,7 @@ model pengurus_contact {
   pengurus_id  String?                        @db.VarChar(255)
   link         String?                        @db.VarChar(255)
   contact_type pengurus_contact_contact_type?
-  pengurus     pengurus?                      @relation(fields: [pengurus_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "pengurus_contact_ibfk_1")
+  pengurus     pengurus?                      @relation(fields: [pengurus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pengurus_contact_ibfk_1")
 
   @@index([pengurus_id], map: "pengurus_id")
 }
@@ -148,7 +148,7 @@ model profile_data {
   sambutan_gub     String?  @db.Text
   sambutan_wagub   String?  @db.Text
   kabinet_aktif_id String?  @db.VarChar(255)
-  kabinet          kabinet? @relation(fields: [kabinet_aktif_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "profile_data_ibfk_1")
+  kabinet          kabinet? @relation(fields: [kabinet_aktif_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "profile_data_ibfk_1")
 
   @@index([kabinet_aktif_id], map: "kabinet_aktif_id")
 }
