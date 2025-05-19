@@ -2,7 +2,7 @@ import Joi from "joi";
 import adminService from "../service/adminService.js";
 
 const adminSchema = Joi.object({
-  username: Joi.string().min(3).max(30).alphanum().required(),
+  username: Joi.string().min(3).max(30).required(),
   password: Joi.string().min(1).required(),
 });
 
