@@ -27,7 +27,7 @@ model album {
   admin        admin?         @relation(fields: [publisher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "album_ibfk_1")
   album_images album_images[]
 
-  @@index([publisher_id], map: "publisher_id")
+  @@index([publisher_id], map: "album_ibfk_1")
 }
 
 model album_images {
@@ -37,8 +37,8 @@ model album_images {
   album     album?  @relation(fields: [album_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "album_images_ibfk_1")
   images    images? @relation(fields: [images_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "album_images_ibfk_2")
 
-  @@index([album_id], map: "album_id")
-  @@index([images_id], map: "images_id")
+  @@index([album_id], map: "album_images_ibfk_1")
+  @@index([images_id], map: "album_images_ibfk_2")
 }
 
 model artikel {
@@ -53,8 +53,8 @@ model artikel {
   admin_artikel_publisher_idToadmin admin?    @relation("artikel_publisher_idToadmin", fields: [publisher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
   admin_artikel_editor_idToadmin    admin?    @relation("artikel_editor_idToadmin", fields: [editor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_2")
 
-  @@index([editor_id], map: "editor_id")
-  @@index([publisher_id], map: "publisher_id")
+  @@index([publisher_id], map: "artikel_ibfk_1")
+  @@index([editor_id], map: "artikel_ibfk_2")
 }
 
 model aspiration_box_response {
@@ -111,8 +111,8 @@ model kabinet {
   pengurus_kabinet_wakil_idTopengurus    pengurus?      @relation("kabinet_wakil_idTopengurus", fields: [wakil_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "kabinet_ibfk_2")
   profile_data                           profile_data[]
 
-  @@index([gubernur_id], map: "gubernur_id")
-  @@index([wakil_id], map: "wakil_id")
+  @@index([gubernur_id], map: "kabinet_ibfk_1")
+  @@index([wakil_id], map: "kabinet_ibfk_2")
 }
 
 model pengurus {
@@ -134,7 +134,7 @@ model pengurus_contact {
   contact_type pengurus_contact_contact_type?
   pengurus     pengurus?                      @relation(fields: [pengurus_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pengurus_contact_ibfk_1")
 
-  @@index([pengurus_id], map: "pengurus_id")
+  @@index([pengurus_id], map: "pengurus_contact_ibfk_1")
 }
 
 model profile_data {
@@ -150,7 +150,7 @@ model profile_data {
   kabinet_aktif_id String?  @db.VarChar(255)
   kabinet          kabinet? @relation(fields: [kabinet_aktif_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "profile_data_ibfk_1")
 
-  @@index([kabinet_aktif_id], map: "kabinet_aktif_id")
+  @@index([kabinet_aktif_id], map: "profile_data_ibfk_1")
 }
 
 model survey_response {
