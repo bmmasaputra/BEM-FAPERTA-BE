@@ -10,9 +10,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: true,
+    origin: (origin, callback) => {
+      callback(null, origin); // Reflect the origin
+    },
   })
 );
+
+// Optional: Handle preflight explicitly for safety
+app.options("*", cors());
 
 app.get("/", (req, res) => {
   res.status(200).json({
