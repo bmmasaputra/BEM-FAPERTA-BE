@@ -7,7 +7,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://bemfapertaunand.vercel.app/",
+  "https://bemfapertaunand.vercel.app",
 ];
 
 // Middleware to parse JSON and URL-encoded data
