@@ -17,6 +17,7 @@ adminRouter.use(authMiddleware);
 // ADMIN AUTH
 adminRouter.get("/api/v1/admin", adminController.getAll);
 adminRouter.post("/api/v1/admin/assign", adminController.assign);
+adminRouter.delete("/api/v1/admin", adminController.remove);
 
 // ARTICLE API
 adminRouter.post(

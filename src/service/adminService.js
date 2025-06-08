@@ -51,12 +51,30 @@ export default {
   },
 
   async getAllAdmin() {
-    const allAdmin = await prisma.admin.findMany();
+    const allAdmin = await prisma.admin.findMany({
+      where: {
+        NOT: {
+          username: "god",
+        },
+      },
+    });
 
     if (allAdmin.length == 0) {
       return { status: 404, message: "Admin List Empty" };
     }
 
     return { status: 200, allAdmin };
+  },
+
+  async removeAdmin(id) {
+    const admin = await prisma.admin.findUnique({ where: { id } });
+
+    if (!admin) {
+      return { status: 404, message: "Admin not found" };
+    }
+
+    await prisma.admin.delete({ where: { id } });
+
+    return { status: 200, message: "Admin deleted successfully" };
   },
 };
