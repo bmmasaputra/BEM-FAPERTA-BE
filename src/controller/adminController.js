@@ -6,42 +6,44 @@ const adminSchema = Joi.object({
   password: Joi.string().min(1).required(),
 });
 
+const idSchema = Joi.string().required();
+
 export default {
   async initiate(req, res) {
-    // return res.status(403).json({
-    //   success: false,
-    //   message: "Access Forbiden"
-    // })
-    const { error } = adminSchema.validate(req.body);
+    return res.status(403).json({
+      success: false,
+      message: "Access Forbiden",
+    });
+    // const { error } = adminSchema.validate(req.body);
 
-    if (error) {
-      return res
-        .status(400)
-        .json({ success: false, message: error.details[0].message });
-    }
+    // if (error) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: error.details[0].message });
+    // }
 
-    try {
-      const { username, password } = req.body;
-      const process = await adminService.addAdmin(username, password);
+    // try {
+    //   const { username, password } = req.body;
+    //   const process = await adminService.addAdmin(username, password);
 
-      if (process.status !== 201) {
-        res.status(process.status).json({
-          success: false,
-          message: process.message,
-        });
-      }
+    //   if (process.status !== 201) {
+    //     res.status(process.status).json({
+    //       success: false,
+    //       message: process.message,
+    //     });
+    //   }
 
-      res.status(201).json({
-        success: true,
-        message: "Admin created",
-        data: process.data,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
+    //   res.status(201).json({
+    //     success: true,
+    //     message: "Admin created",
+    //     data: process.data,
+    //   });
+    // } catch (error) {
+    //   res.status(500).json({
+    //     success: false,
+    //     message: error.message,
+    //   });
+    // }
   },
 
   async assign(req, res) {
@@ -128,6 +130,40 @@ export default {
       res.status(200).json({
         success: true,
         data: process.allAdmin,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+
+  async remove(req, res) {
+    const admin = req.admin;
+
+    const { error } = idSchema.validate(req.body.id);
+
+    if (error) {
+      return res
+        .status(400)
+        .json({ success: false, message: error.details[0].message });
+    }
+
+    try {
+      const { id } = req.body;
+      const process = await adminService.removeAdmin(id);
+
+      if (process.status !== 200) {
+        return res.status(process.status).json({
+          success: false,
+          message: process.message,
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Admin removed",
       });
     } catch (error) {
       res.status(500).json({
