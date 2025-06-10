@@ -8,6 +8,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "https://bemfapertaunand.vercel.app",
+  "https://adminbemfapertaunand.vercel.app"
 ];
 
 // Middleware to parse JSON and URL-encoded data
