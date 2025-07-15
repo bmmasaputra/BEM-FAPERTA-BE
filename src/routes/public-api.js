@@ -8,6 +8,7 @@ import kabinetController from "../controller/kabinetController.js";
 import profileController from "../controller/profileController.js";
 import ukmController from "../controller/ukmController.js";
 import aspirationController from "../controller/aspirationController.js";
+import surveyController from "../controller/surveyController.js";
 
 const publicRouter = express.Router();
 
@@ -43,5 +44,8 @@ publicRouter.get("/api/v1/ukm", ukmController.getAll);
 
 // ASPIRATION API
 publicRouter.post("/api/v1/aspiration", aspirationController.submit);
+
+// SURVEY API
+publicRouter.get("/api/v1/survey", surveyController.getAllSurvey);
 
 export default publicRouter;
