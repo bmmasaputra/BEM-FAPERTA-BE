@@ -10,6 +10,7 @@ import kabinetController from "../controller/kabinetController.js";
 import profileController from "../controller/profileController.js";
 import ukmController from "../controller/ukmController.js";
 import aspirationController from "../controller/aspirationController.js";
+import surveyController from "../controller/surveyController.js";
 
 const adminRouter = express.Router();
 adminRouter.use(authMiddleware);
@@ -134,5 +135,10 @@ adminRouter.delete("/api/v1/ukm", ukmController.remove);
 adminRouter.get("/api/v1/aspiration", aspirationController.getAll);
 adminRouter.get("/api/v1/aspiration/:id", aspirationController.getById);
 adminRouter.delete("/api/v1/aspiration", aspirationController.remove);
+
+// SURVEY API
+adminRouter.post("/api/v1/survey", surveyController.createSurvey);
+adminRouter.put("/api/v1/survey", surveyController.editSurvey);
+adminRouter.delete("/api/v1/survey", surveyController.removeSurvey);
 
 export default adminRouter;
